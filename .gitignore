@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+
+# Archivos pesados/sensibles obligatorios (Rúbrica)
+conv_MLP_84.h5
+WilhemNet86.h5
