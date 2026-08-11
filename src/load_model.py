@@ -2,13 +2,13 @@ import tensorflow as tf
 import os
 import warnings
 
-# Ocultar warnings de TensorFlow
+# Eliminar explícitamente el mensaje de oneDNN
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+# Ocultar warnings menores de C++
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 warnings.filterwarnings('ignore')
 
-# Deshabilitar ejecución eager (requerido por el código original de keras/tf)
-tf.compat.v1.disable_eager_execution()
-tf.compat.v1.experimental.output_all_intermediates(True)
+# Ya NO necesitamos disable_eager_execution() porque modernizamos Grad-CAM a TensorFlow 2.x
 
 def model_fun(model_path='conv_MLP_84.h5'):
     """

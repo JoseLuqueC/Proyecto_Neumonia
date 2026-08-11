@@ -1,32 +1,44 @@
 import numpy as np
 import cv2
-from tensorflow.keras import backend as K
+import tensorflow as tf
 from src.preprocess_img import preprocess
 from src.load_model import model_fun
 
 def grad_cam(array):
     """
     Genera el mapa de calor (Grad-CAM) para explicar la predicción.
+    Migrado a TensorFlow 2.x (GradientTape) para eliminar los warnings de ejecución Eager.
     """
     img = preprocess(array)
     model = model_fun()
-    preds = model.predict(img)
-    argmax = np.argmax(preds[0])
-    output = model.output[:, argmax]
+    
+    # 1. Creamos un modelo auxiliar que escupe los Feature Maps y las Predicciones
     last_conv_layer = model.get_layer("conv10_thisone")
+    grad_model = tf.keras.models.Model(
+        inputs=[model.inputs],
+        outputs=[last_conv_layer.output, model.output]
+    )
     
-    grads = K.gradients(output, last_conv_layer.output)[0]
-    pooled_grads = K.mean(grads, axis=(0, 1, 2))
-    iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
-    pooled_grads_value, conv_layer_output_value = iterate(img)
-    
-    for filters in range(64):
-        conv_layer_output_value[:, :, filters] *= pooled_grads_value[filters]
+    # 2. Usamos GradientTape (La forma moderna de TF 2.x) en lugar de K.gradients
+    with tf.GradientTape() as tape:
+        conv_outputs, predictions = grad_model(img)
+        pred_index = tf.argmax(predictions[0])
+        loss = predictions[:, pred_index]
         
-    heatmap = np.mean(conv_layer_output_value, axis=-1)
-    heatmap = np.maximum(heatmap, 0)  # ReLU
-    heatmap /= np.max(heatmap)  # Normalización
+    # 3. Calculamos los gradientes
+    grads = tape.gradient(loss, conv_outputs)
+    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
     
+    # 4. Multiplicamos la salida convolucional por los gradientes
+    conv_outputs = conv_outputs[0]
+    heatmap = conv_outputs @ tf.expand_dims(pooled_grads, -1)
+    heatmap = tf.squeeze(heatmap)
+    
+    # 5. Normalizamos (ReLU)
+    heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+    heatmap = heatmap.numpy()
+    
+    # 6. Colorear y superponer (OpenCV)
     heatmap = cv2.resize(heatmap, (img.shape[1], img.shape[2]))
     heatmap = np.uint8(255 * heatmap)
     heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
