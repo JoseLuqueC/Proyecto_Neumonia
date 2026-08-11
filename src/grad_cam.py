@@ -15,13 +15,18 @@ def grad_cam(array):
     # 1. Creamos un modelo auxiliar que escupe los Feature Maps y las Predicciones
     last_conv_layer = model.get_layer("conv10_thisone")
     grad_model = tf.keras.models.Model(
-        inputs=[model.inputs],
+        inputs=model.inputs,
         outputs=[last_conv_layer.output, model.output]
     )
     
     # 2. Usamos GradientTape (La forma moderna de TF 2.x) en lugar de K.gradients
     with tf.GradientTape() as tape:
         conv_outputs, predictions = grad_model(img)
+        
+        # En modelos legacy (h5), predictions puede devolverse como una lista de 1 tensor
+        if isinstance(predictions, list):
+            predictions = predictions[0]
+            
         pred_index = tf.argmax(predictions[0])
         loss = predictions[:, pred_index]
         
