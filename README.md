@@ -56,4 +56,4 @@ Breve descripción del proyecto de detección de Neumonía para el curso DDPIA.
 
 ## 📊 Diagramas
 
-*(Agregar aquí los diagramas de flujo y de datos requeridos por la rúbrica)*
+![Diagrama de Arquitectura del Sistema](diagrama.png)
