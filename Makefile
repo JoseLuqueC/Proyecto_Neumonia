@@ -14,7 +14,7 @@ install:
 	uv sync
 
 run:
-	uv run python -m src.main
+	uv run python -m src.detector_neumonia
 
 test:
 	uv run pytest test/

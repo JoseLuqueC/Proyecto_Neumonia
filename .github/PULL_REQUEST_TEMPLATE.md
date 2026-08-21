@@ -14,7 +14,7 @@ Aplica un [prefijo convencional](https://www.conventionalcommits.org/) en el tí
 Selecciona las áreas principales en las que trabaja esta PR:
 - [ ] **Preprocesamiento / Imágenes** (`src/read_img.py`, `src/preprocess_img.py`)
 - [ ] **Modelo e Inferencia** (`src/load_model.py`, `src/grad_cam.py`)
-- [ ] **Integración & CLI** (`src/integrator.py`, `src/main.py`)
+- [ ] **Integración & CLI** (`src/integrator.py`, `src/detector_neumonia.py`)
 - [ ] **Pruebas Unitarias** (`test/`)
 - [ ] **Infraestructura & Contenedores** (`Dockerfile`, `.gitignore`, `Makefile`, `pyproject.toml`)
 - [ ] **Documentación & README** (`README.md`, Licencia MIT)

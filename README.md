@@ -31,7 +31,7 @@ Breve descripción del proyecto de detección de Neumonía para el curso DDPIA.
 2. Ejecutar la aplicación:
    ```bash
    make run
-   # o alternativamente: uv run python src/main.py
+   # o alternativamente: uv run python -m src.detector_neumonia
    ```
 3. Ejecutar pruebas unitarias:
    ```bash
