@@ -11,7 +11,7 @@ class TestReadImg:
     def setup_teardown(self):
         # Arrange global (Crear imagen de prueba)
         self.test_image_path = "test_dummy.jpg"
-        dummy_img = np.zeros((50, 50, 3), dtype=np.uint8)
+        dummy_img = np.ones((50, 50, 3), dtype=np.uint8) * 255
         cv2.imwrite(self.test_image_path, dummy_img)
         
         yield # Aquí se ejecutan los tests
