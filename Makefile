@@ -17,7 +17,7 @@ run:
 	uv run python -m src.detector_neumonia
 
 test:
-	uv run pytest test/
+	uv run python -m pytest test/
 
 lint:
 	uv run ruff check src/ test/
