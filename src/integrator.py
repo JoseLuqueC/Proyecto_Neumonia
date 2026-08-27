@@ -3,13 +3,13 @@ from src.preprocess_img import preprocess
 from src.load_model import model_fun
 from src.grad_cam import grad_cam
 
-def predict(array):
+def predict(img_array: np.ndarray) -> tuple[str, float, np.ndarray]:
     """
     Coordinador de módulos: Unifica las salidas para la interfaz gráfica.
     Realiza el preprocesamiento, la predicción y genera el heatmap.
     """
     # 1. Preprocesamiento
-    batch_array_img = preprocess(array)
+    batch_array_img = preprocess(img_array)
     
     # 2. Carga del modelo y predicción
     model = model_fun()

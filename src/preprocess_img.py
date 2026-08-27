@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def preprocess(array):
+def preprocess(array: np.ndarray) -> np.ndarray:
     """
     Realiza el preprocesamiento de la imagen según la rúbrica:
     Resize 512x512, Escala de grises, CLAHE, Normalización (0-1)

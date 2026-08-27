@@ -3,12 +3,12 @@ import numpy as np
 import pydicom as dicom
 from PIL import Image
 
-def read_dicom_file(path):
+def read_dicom_file(filepath: str) -> tuple[np.ndarray, Image.Image]:
     """
     Lee una imagen en formato DICOM y la convierte a RGB.
     """
     # Se usa dcmread que es el estándar moderno en pydicom
-    img = dicom.dcmread(path)
+    img = dicom.dcmread(filepath)
     img_array = img.pixel_array
     img2show = Image.fromarray(img_array)
     img2 = img_array.astype(float)
@@ -17,11 +17,11 @@ def read_dicom_file(path):
     img_RGB = cv2.cvtColor(img2, cv2.COLOR_GRAY2RGB)
     return img_RGB, img2show
 
-def read_jpg_file(path):
+def read_jpg_file(filepath: str) -> tuple[np.ndarray, Image.Image]:
     """
     Lee una imagen en formato JPG/JPEG/PNG.
     """
-    img = cv2.imread(path)
+    img = cv2.imread(filepath)
     img_array = np.asarray(img)
     img2show = Image.fromarray(img_array)
     img2 = img_array.astype(float)
