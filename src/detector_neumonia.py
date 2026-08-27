@@ -112,11 +112,13 @@ class App:
             showinfo(title="Guardar", message="Los datos se guardaron con éxito.")
 
     def create_pdf(self):
+        import time
         cap = tkcap.CAP(self.root)
-        ID = "Reporte" + str(self.reportID) + ".jpg"
+        timestamp = int(time.time())
+        ID = f"Reporte_{timestamp}.jpg"
         cap.capture(ID)
         img = Image.open(ID).convert("RGB")
-        pdf_path = r"Reporte" + str(self.reportID) + ".pdf"
+        pdf_path = f"Reporte_{timestamp}.pdf"
         img.save(pdf_path)
         self.reportID += 1
         showinfo(title="PDF", message="El PDF fue generado con éxito.")
